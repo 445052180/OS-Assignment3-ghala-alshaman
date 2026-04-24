@@ -1,8 +1,8 @@
 # Assignment 3 - Complete Documentation
 
-**Student Name**: [Your Full Name]  
-**Student ID**: [Your ID]  
-**Date Submitted**: [Submission Date]
+**Student Name**: [Ghala ibrahim bin shaman]  
+**Student ID**: [445052180]  
+**Date Submitted**: [maybe 27 April]
 
 ---
 
@@ -28,72 +28,91 @@
 ---
 
 ## Part 1: Development Log (1 mark)
-
+I forked repository Set up the project and added my student ID
+I am demented ReentrantLock to Protect shared variables from race conditions
+I protect the execution log using a look to avoid concurrent modification errors
+I added see my form to control CBU access and tested the program multiple times
 Document your development process with **minimum 3 entries** showing progression:
 
-### Entry 1 - [Date, Time]
+### Entry 1 - [22april,7]
 **What I implemented**: 
-
+I forked repository Set up the project and added my student ID I also understand Synchronisation 
 **Challenges encountered**: 
-
+at first it was confusing to to identify which parts of the code required protection.
 **How I solved it**: 
-
+I focused on shared variables and methods that are accessed by multiple threads.
 **Testing approach**: 
+I run program to observed  its behavior before applying synchronization.
 
 **Time spent**: 
-
+1-2 h
 ---
 
-### Entry 2 - [Date, Time]
+### Entry 2 - [22, april 7 pm]
 **What I implemented**: 
+Condition happens when multiple threats access shared data at the same time and cause incorrect result
 
+ReentrantLock is used to ensure only one shared can enter a critical section at time
+
+A look at those one thread only while I see my form can allow more depending on Permits
+
+Synchronisation is important to keep the program stable and correct
 **Challenges encountered**: 
-
+I had difficulty placing the lock correctly without breaking the program
 **How I solved it**: 
-
+I used finally blocks to ensure the lock is always released
 **Testing approach**: 
-
+I tested the program multiple times to ensure no errors occur
 **Time spent**: 
-
+2h
 ---
 
-### Entry 3 - [Date, Time]
+### Entry 3 - [22, 11pm]
 **What I implemented**: 
+Before synchronisation the program could reduce Inconsistent Result due to Two multiple threads running together
 
+After using looks and Simma form access to share resource become controlled
+
+This improved the accuracy and stability of program
+
+The output become consistent across multiple runs
+I implemented a semaphore to control CPU access and ensure only one process runs at a time
 **Challenges encountered**: 
-
+I initially placed the semaphore incorrectly, which made it ineffective.
 **How I solved it**: 
-
+I wrapped the entire execution code inside the semaphore block.
 **Testing approach**: 
-
+I ran the program several times and confirmed that results are consistent
 **Time spent**: 
-
+2
 ---
 
-### Entry 4 - [Date, Time]
+### Entry 4 - [25, 11]
 **What I implemented**: 
-
+I tested the full program after adding synchronization and verified the results.
 **Challenges encountered**: 
-
+I wanted to make sure there were no hidden errors.
 **How I solved it**: 
+I ran the program multiple times and checked the output carefully.
 
 **Testing approach**: 
-
+Repeated execution and comparison of results.
 **Time spent**: 
-
+3
 ---
 
-### Entry 5 - [Date, Time]
+### Entry 5 - [26 april, 10]
 **What I implemented**: 
 
+I completed the documentation and prepared the video demonstration.
 **Challenges encountered**: 
-
+Organizing the explanation clearly
 **How I solved it**: 
-
+I simplified the explanation and followed the template
 **Testing approach**: 
-
+Reviewed all sections before submission
 **Time spent**: 
-
+1h
 ---
 
 ## Part 2: Technical Questions (1 mark)
@@ -105,7 +124,13 @@ Document your development process with **minimum 3 entries** showing progression
 - What incorrect behavior could occur?
 
 **Your Answer**:
+Race conditions occur when multiple threads access shared data at the same time.
 
+First, the variable contextSwitchCount is shared, and multiple threads may update it simultaneously, causing incorrect counting.
+
+Second, the executionLog (ArrayList) is shared, and concurrent access may cause data corruption or runtime errors.
+
+Without synchronization, updates may be lost or inconsistent results may appear.
 [Your answer here - 4-6 sentences with code examples]
 
 ---
@@ -113,7 +138,20 @@ Document your development process with **minimum 3 entries** showing progression
 ### Question 2: Locks vs Semaphores
 **Q**: Explain the difference between ReentrantLock and Semaphore. Where did you use each in your code and why?
 
+
+
+
 **Your Answer**:
+
+ReentrantLock allows only one thread to access a critical section at a time, while Semaphore can allow multiple threads based on permits.
+
+I used ReentrantLock to protect shared variables and ensure mutual exclusion.
+
+I used Semaphore with one permit to control CPU access, so only one process runs at a time.
+
+This combination ensures both safety and controlled execution.
+
+
 
 [Your answer here - explain your implementation choices]
 
@@ -123,6 +161,16 @@ Document your development process with **minimum 3 entries** showing progression
 **Q**: What is deadlock? Explain TWO prevention techniques and what you did to prevent deadlocks in your code.
 
 **Your Answer**:
+
+
+Deadlock is a situation where threads are waiting for each other and none can continue.
+
+One prevention technique is using try-finally to always release locks.
+
+Another is avoiding nested locks or maintaining consistent lock order.
+
+In my code, I used try-finally blocks to ensure locks and semaphores are always released, preventing deadlocks.
+
 
 [Your answer here - reference try-finally blocks, lock ordering, etc.]
 
@@ -137,6 +185,18 @@ Document your development process with **minimum 3 entries** showing progression
 
 **Your Answer**:
 
+I used one lock for all three counters (coarse-grained locking).
+
+This choice simplifies the implementation and reduces the chance of errors.
+
+The trade-off is lower concurrency, but higher safety.
+
+Using separate locks (fine-grained) could improve performance, but increases complexity.
+
+Since the counters are simple, one lock was sufficient and safer for this assignment.
+
+
+
 [Your answer here - explain coarse-grained vs fine-grained locking, independence of counters, concurrency implications. Show understanding of when to use each approach. 5-8 sentences expected.]
 
 ---
@@ -146,49 +206,87 @@ Document your development process with **minimum 3 entries** showing progression
 ### Critical Section #1: Counter Variables
 
 **Which variables**: 
-
+contestSwitchCount,completedProcessCount,totalWaitingTime
 **Why they need protection**: 
-
+Because these variables are shared resources and are updated by multiple threads, without protection, a race condition might occur where more than one thread attempts to modify the value simultaneously, resulting in missed updates and incorrect statistical results.
 **Synchronization mechanism used**: 
-
+ReetrantLock
 **Code snippet**:
+
+
 ```java
+ public static void incrementContextSwitch() {
+      
+        lock.lock();
+        try{
+        contextSwitchCount++;
+        }
+        finally{
+            lock.unlock();
+        }
+    
+    }
 // Paste your implementation here
 ```
 
 **Justification**: 
-
+Using lock() and unlock() ensures mutual exclusion, meaning only one thread can increment the counter at a time, thus preventing overlapping calculations.
 ---
 
 ### Critical Section #2: Execution Log
 
 **What resource**: 
-
+executionLog (ArrayList<String>).
 **Why it needs protection**: 
-
+becouse arrylists in java  are not thread-safe, if more than one thread attempts to add a message (log entry) at the same time, a memory error or data loss within the list may occur
 **Synchronization mechanism used**: 
-
+ReentrantLock.
 **Code snippet**:
 ```java
+ 
 // Paste your implementation here
-```
+``` public static void logExecution(String message) {
+        // TODO: Protect this critical section with a lock
+        // RACE CONDITION: ArrayList is not thread-safe!
+        lock.lock();
+        try{
+        executionLog.add(message);
+        } finally{
+            lock.unlock();
+        }
+    }
 
 **Justification**: 
+The lock ensures that the list addition process is sequential and orderly, maintaining list integrity and preventing ConcurrentModificationExceptions.
 
 ---
 
 ### Critical Section #3: CPU Semaphore
 
 **Purpose of semaphore**: 
+To control the number of processes that can use the processor simultaneously, simulating process access to a limited resource.
 
 **Number of permits and why**: 
-
+1 Permit; the reason is to simulate a system with a single CPU, where no more than one process can actually execute at the same time.
 **Where implemented**: 
-
+in run()
+in process clas
 **Code snippet**:
 ```java
 // Paste your implementation here
+ public void run() {
+        // TODO #3: Acquire CPU semaphore before executing
+        try{
+            SharedResources.cupSemaphore.acquire();
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        } finally{
+            SharedResources.cupSemaphore.release();
+
+        }
+ }
 ```
+
 
 **Effect on program behavior**: 
 
