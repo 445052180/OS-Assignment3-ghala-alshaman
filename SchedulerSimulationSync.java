@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.Semaphore;
 
 // ANSI Color Codes for enhanced terminal output
 class Colors {
@@ -43,6 +44,7 @@ public static final ReentrantLock lock = new ReentrantLock();
     // Example: public static final ReentrantLock lock = new ReentrantLock();
     
     // TODO #2: Add a Semaphore to limit concurrent process execution
+    public static final Semaphore cupSemaphore = new Semaphore(1);
     // Example: public static final Semaphore cpuSemaphore = new Semaphore(1);
     
     // Method to increment context switch counter
@@ -125,6 +127,16 @@ class Process implements Runnable {
     @Override
     public void run() {
         // TODO #3: Acquire CPU semaphore before executing
+        try{
+            SharedResources.cupSemaphore.acquire();
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        } finally{
+            SharedResources.cupSemaphore.release();
+
+        }
+        
+        
         // This ensures only allowed number of processes run simultaneously
         
         try {
