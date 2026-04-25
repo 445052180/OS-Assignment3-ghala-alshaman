@@ -200,6 +200,8 @@ class Process implements Runnable {
             
         } finally {
             // TODO #4: Release CPU semaphore here
+
+            SharedResources.cupSemaphore.release();
             // Always release in finally block to prevent deadlocks!
         }
     }
