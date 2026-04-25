@@ -296,58 +296,80 @@ in process clas
 
 ### Test 1: Consistency Check
 **What I tested**: Running program multiple times to verify consistent results
-
+ensuring the consistsncy of result and calculation when running the program multiple times with the same Seed 
 **Testing procedure**: 
 ```bash
 # Commands used (run the program at least 5 times)
-```
+```java SchedulerSimulationSync
+java SchedulerSimulationSync
+java SchedulerSimulationSync
+java SchedulerSimulationSync
+java SchedulerSimulationSync
 
 **Results**: 
 (Show that running multiple times produces consistent, correct results)
+Total Context Switches: 20
+Total Completed Processes: 11
+all process finished excution successfully with corect scheduling behavior
 
 **Why synchronization is necessary**: 
+​​Synchronization is essential to prevent race conditions. Without it, two threads might attempt to update the total WaitingTime simultaneously, resulting in a lost update. Shared variables like counters and arrays need protection because they are not designed to handle concurrent multi-access.
+
 (Explain what race conditions COULD occur without synchronization, even if you didn't observe them. Explain which shared resources need protection and why.)
 
 **Conclusion**: 
-
+The consistent results across multiple runs confirm that synchronization was correctly implemented and prevents race conditions
 ---
 
 ### Test 2: Exception Testing
 **What I tested**: Checking for ConcurrentModificationException
-
+Checking for ConcurrentModificationException.
 **Testing procedure**: 
-
+I ran the program multiple times while processes were being added and removed from the ready queue concurrently.
 **Results**: 
-
+No ConcurrentModificationException occurred during execution.
 **What this proves**: 
-
+This proves that shared data structures like the ready queue are properly synchronized, preventing unsafe concurrent modifications.
 ---
 
 ### Test 3: Correctness Verification
 **What I tested**: Verifying correct final values (total burst time, context switches, etc.)
-
+Verifying correct final values such as total completed processes, context switches, and waiting time.
 **Expected values**: 
-
+All processes (11) should complete execution
+No process should remain with remaining time
+Context switching should occur correctly
 **Actual values**: 
-
+Total Context Switches: 20
+Total Completed Processes: 11
+All processes reached 0 remaining time
+Average Waiting Time: 37187ms
 **Analysis**: 
 
----
+---The results match the expected behavior of the Round Robin scheduler. Each process was executed fairly, and CPU time was shared correctly. The synchronization ensured accurate tracking of execution and prevented inconsistencies.
 
 ### Test 4: Different Scenarios
 **Scenario tested**: [e.g., different time quantum, more processes, etc.]
+Running the program with the given time quantum (4000ms) and multiple processes.
 
+I tested the scheduler using multiple processes with different burst times while keeping the time quantum fixed at 4000ms.
 **Purpose**: 
+The purpose of this test was to observe how the Round Robin scheduler distributes CPU time among processes with varying execution lengths, and to evaluate fairness and performance under different workloads.
+
 
 **Results**: 
+The results showed that processes with shorter burst times (such as P1, P8, and P9) 
+completed execution in a single cycle, while processes with longer burst times (such as P2, P5, and P11) required multiple cycles to finish. The scheduler correctly returned unfinished processes to the ready queue and continued execution in a fair order. Context switching occurred regularly, and all processes eventually completed without errors.
+
 
 **What I learned**: 
-
+From this test, I learned that Round Robin scheduling ensures fairness by giving each process equal CPU time slices regardless of its burst time. I also understood how synchronization plays a critical role in maintaining correct execution when multiple processes are competing for shared resources. Without proper synchronization, the scheduling order and results could become inconsistent. Additionally, I observed how increasing the number of processes increases context switching and overall waiting time.
 ---
 
 ## Part 5: Reflection and Learning
 
 ### What I learned about synchronization:
+During this assignment, I learned that multi-threading is very powerful but also risky if not managed correctly. I discovered the concept of race conditions and how two processes can attempt to modify a single variable simultaneously, causing hidden computational errors. The biggest challenge was accurately identifying "critical sections" within the code and ensuring their protection without slowing down the system. I learned the difference between a reentrant lock, which ensures mutual restriction, and a semaphore, which controls the number of permissions available to access resources. One of the most important lessons I learned was the necessity of using a final block to unlock the system and prevent a deadlock in case of a sudden error. Synchronization is not just about sequencing events; it's about ensuring data integrity and consistency in complex environments.
 
 [6-8 sentences about key concepts, challenges, insights]
 
@@ -357,9 +379,10 @@ in process clas
 
 Give TWO examples where synchronization is critical:
 
-**Example 1**: 
+**Example 1**: Synchronization is crucial when updating account balances; If two people try to withdraw money from the same shared account simultaneously, the system must use "locks" to ensure that each transaction is processed accurately and to prevent withdrawals exceeding the available balance.
 
-**Example 2**: 
+
+**Example 2**: Online Ticket Booking: In airline or cinema booking systems, synchronization prevents multiple users from booking the same seat at the same time. A designated seat is locked as soon as the first user begins the payment process
 
 ---
 
@@ -367,34 +390,39 @@ Give TWO examples where synchronization is critical:
 
 [Explain to someone who just finished Assignment 1 - use simple terms and analogies]
 
----
+---: Imagine the CPU as a single "study room" that can only accommodate one person, and the processes as "students" who want to study. In the first assignment, we called the students in turn manually. For this assignment, we placed a "lock" on the room door; the first student to arrive takes the lock, enters, and locks the door behind them. The remaining students wait outside (ready queue). When a student finishes, they release the lock for the next student to take. Without this lock, two students might enter at the same time, causing noise (data interference), and neither could concentrate or successfully complete their task.
 
 ## Part 6: GitHub Repository Information
 
 **Repository URL**: 
 
 **Number of commits**: 
-
+7,8
 **Commit messages**: 
-1. 
-2. 
-3. 
-4. 
+1."CHANGE STUDENT ID TO MY ID "
+2."Add Reentrant lock for shared resorce excuting log" 
+3. "add task 3"
+4. "answer the guestion"
 
 ---
 
 ## Summary
 
 **Total time spent on assignment**: 
-
+8-10 h
 **Key takeaways**: 
-1. 
-2. 
-3. 
+1. deep understanding of how mutex and semahorm function in java
+2.the ability  to diagnose and resolve Race Condition issues in distributed systems.
+ 
+3.The importance of thread coordination to ensure the accuracy of final statistics.
+
+ 
 
 **Most challenging aspect**: 
+Determining the precise locations where acquire() and release() should be executed on the simphor to ensure the emulation of a single processor without causing program hangs.
 
 **What I'm most proud of**: 
+My success in making the output appear very organized and colorful, with progress bars, despite the complexities of background synchronization.
 
 ---
 
