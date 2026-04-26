@@ -17,7 +17,8 @@
 **Video Link**: [https://drive.google.com/file/d/13v_ZKKq5k667WeFXKEbv13M1_hcEeEkN/view?usp=drivesdk]
 
 
-**Video filename**: `[YourStudentID]_Assignment3_Synchronization.mp4`
+**Video filename**: `
+[445052180-Assignment3-synchronization.mp4]
 
 **Verification**:
 - [ ] Link is accessible (tested in incognito mode)
@@ -33,6 +34,7 @@ I forked repository Set up the project and added my student ID
 I am demented ReentrantLock to Protect shared variables from race conditions
 I protect the execution log using a look to avoid concurrent modification errors
 I added see my form to control CBU access and tested the program multiple times
+
 Document your development process with **minimum 3 entries** showing progression:
 
 ### Entry 1 - [22april,7]
